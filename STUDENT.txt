@@ -1,2 +1,2 @@
-APP_URL=https://alwifdd.github.io/storyverse-pwa/
+APP_URL= https://alwifdd.github.io/storyverse-awi/
 MAP_SERVICE_API_KEY= Menggunakan OpenStreetMap via Leaflet
