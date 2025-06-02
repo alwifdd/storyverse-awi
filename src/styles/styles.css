@@ -54,7 +54,7 @@ body {
   border-bottom: 1px solid var(--border-color);
   position: sticky; /* Membuat header tetap di atas saat scroll */
   top: 0;
-  z-index: 990; /* Di bawah menu overlay dan skip link */
+  z-index: 1000; /* Perbaikan: Naikkan z-index untuk header */
 }
 
 .app-header__brand {
@@ -92,7 +92,8 @@ body {
   color: var(--text-color);
   cursor: pointer;
   padding: 0.5rem;
-  z-index: 1001; /* Pastikan di atas overlay */
+  z-index: 1100; /* Pastikan hamburger button di atas menu */
+  position: relative;
 }
 
 /* Styling dasar untuk .navbar-links (Desktop) */
@@ -282,7 +283,7 @@ main {
   box-shadow: 0 0 0 2px rgba(255, 218, 99, 0.5);
 }
 
-/* == Map & Camera == (Tidak ada perubahan signifikan) */
+/* == Map & Camera == */
 .map-container,
 .map-container-small {
   height: 400px;
@@ -290,10 +291,34 @@ main {
   border-radius: 8px;
   margin-bottom: 1rem;
   border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
 }
+
 .map-container-small {
   height: 280px;
 }
+
+/* Sembunyikan leaflet attribution yang mengganggu */
+.map-container .leaflet-control-attribution,
+.map-container-small .leaflet-control-attribution {
+  display: none !important;
+}
+
+/* Sembunyikan zoom controls pada mobile */
+@media (max-width: 768px) {
+  .map-container .leaflet-control-zoom,
+  .map-container-small .leaflet-control-zoom {
+    display: none !important;
+  }
+
+  /* Sembunyikan semua leaflet controls pada mobile */
+  .map-container .leaflet-control-container,
+  .map-container-small .leaflet-control-container {
+    display: none !important;
+  }
+}
+
 .camera-container {
   position: relative;
   background-color: #e5e7eb;
@@ -436,32 +461,9 @@ main {
   font-size: 1rem;
 }
 
-/* == Mobile Responsiveness & Hamburger Menu == */
-.menu-overlay {
-  /* Overlay untuk efek blur saat menu mobile aktif */
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(4px); /* Efek blur */
-  -webkit-backdrop-filter: blur(4px); /* Untuk Safari */
-  z-index: 998; /* Di bawah menu tapi di atas konten lain */
-}
-.menu-overlay.active {
-  display: block;
-}
-
 @media (max-width: 768px) {
   .app-header {
     padding: 0.75rem 1rem; /* Kurangi padding header di mobile */
-    /* Jika #app-navigation tidak diatur untuk menempati sisa ruang,
-       maka .app-header__brand dan .hamburger-button akan berdampingan.
-       Anda mungkin perlu memastikan .app-header__navigation diposisikan ke kanan
-       atau .hamburger-button secara eksplisit.
-    */
   }
   .app-header__brand h1 {
     font-size: 1.3rem;
@@ -471,7 +473,7 @@ main {
     display: block; /* Tampilkan tombol hamburger di mobile */
   }
 
-  /* Sembunyikan link navbar desktop, tampilkan menu mobile saat .active */
+  /* Menu mobile dengan z-index yang benar */
   .app-header__navigation .navbar-links {
     display: none; /* Sembunyikan secara default di mobile */
     position: fixed;
@@ -486,7 +488,7 @@ main {
     align-items: flex-start; /* Ratakan item ke kiri */
     gap: 0; /* Hapus gap flex, atur jarak dengan margin pada li */
     transition: right 0.3s ease-in-out;
-    z-index: 999; /* Di atas overlay dan header */
+    z-index: 1060; /* Z-index lebih tinggi dari overlay */
     overflow-y: auto; /* Jika item menu banyak */
   }
   .app-header__navigation .navbar-links.active {
