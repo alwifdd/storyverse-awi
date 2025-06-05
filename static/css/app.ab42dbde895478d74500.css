@@ -1,0 +1,595 @@
+/* src/styles/styles.css */
+
+:root {
+  --primary-color: #ffda63;
+  --primary-hover-color: #fbc02d;
+  --secondary-color: #4a5568;
+  --background-color: #fffbeb;
+  --surface-color: #ffffff;
+  --text-color: #2d3748;
+  --subtle-text-color: #718096;
+  --error-color: #ef4444;
+  --white-color: #ffffff;
+  --border-color: #e5e7eb;
+  --font-family-sans-serif: "Roboto", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+    sans-serif;
+  --font-family-headings: "Montserrat", sans-serif;
+  --header-height: 60px; /* Perkiraan tinggi header, sesuaikan jika perlu */
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-sans-serif);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  position: relative;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 10px 15px;
+  z-index: 1200;
+  transition: top 0.3s ease-in-out;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* == Header & Navigation == */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 2rem;
+  background-color: var(--surface-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.app-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 1002; /* Agar brand tidak tertutup menu di beberapa kasus */
+}
+
+.app-header__logo {
+  font-size: 32px;
+  color: var(--primary-color);
+  line-height: 1;
+}
+
+.app-header__brand h1 {
+  font-family: var(--font-family-headings);
+  color: var(--text-color);
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.app-header__navigation {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.hamburger-button {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1100;
+  position: relative;
+}
+
+.app-header__navigation .navbar-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.app-header__navigation .navbar-links a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 500;
+  padding: 0.5rem 0.25rem;
+  position: relative;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, border-bottom-color 0.2s ease;
+}
+
+.app-header__navigation .navbar-links a:hover,
+.app-header__navigation .navbar-links a:focus {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  outline: none;
+}
+
+.app-header__navigation .navbar-links button,
+.app-header__navigation .navbar-links .btn {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  border-radius: 4px;
+  line-height: normal;
+}
+
+.app-header__navigation .navbar-links .logout-button:hover,
+.app-header__navigation .navbar-links .logout-button:focus {
+  color: var(--error-color);
+}
+
+.app-header__navigation .navbar-links .btn-primary {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+.app-header__navigation .navbar-links .btn-primary:hover,
+.app-header__navigation .navbar-links .btn-primary:focus {
+  background-color: var(--primary-hover-color);
+}
+.app-header__navigation .navbar-links .btn-primary[disabled] {
+  background-color: #ffeecf;
+  color: var(--subtle-text-color);
+}
+
+.app-header__navigation .navbar-links .btn-danger {
+  background-color: var(--error-color);
+  color: var(--white-color);
+}
+.app-header__navigation .navbar-links .btn-danger:hover,
+.app-header__navigation .navbar-links .btn-danger:focus {
+  background-color: #cc2f2f;
+}
+
+.app-header__navigation .navbar-links .btn-sm {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+/* == Main Content & Footer == */
+main {
+  padding: 2rem;
+  min-height: calc(
+    100vh - var(--header-height) - 73px
+  ); /* Gunakan var(--header-height) */
+  position: relative;
+  z-index: 1;
+}
+.content-heading {
+  font-family: var(--font-family-headings);
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+  font-size: 2rem;
+  color: var(--secondary-color);
+  font-weight: 700;
+}
+.app-footer {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: var(--surface-color);
+  border-top: 1px solid var(--border-color);
+  color: var(--subtle-text-color);
+  position: relative;
+  z-index: 2;
+}
+
+/* == Story Items == */
+.story-item__title {
+  font-family: var(--font-family-headings);
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+.stories-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.story-item {
+  background-color: var(--surface-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.story-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+.story-item__thumbnail {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+}
+.story-item__content {
+  padding: 1rem 1.25rem;
+}
+.story-item__date {
+  font-size: 0.8rem;
+  color: var(--subtle-text-color);
+  margin-bottom: 0.75rem;
+}
+.story-item__description {
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+/* == Forms == */
+.form-container {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: var(--surface-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.form-group {
+  margin-bottom: 1.5rem;
+}
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  font-family: inherit;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(255, 218, 99, 0.5);
+}
+
+/* == Map & Camera == */
+.map-container,
+.map-container-small {
+  height: 400px;
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+.map-container-small {
+  height: 280px;
+}
+
+.camera-container {
+  position: relative;
+  background-color: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+}
+#camera-video {
+  width: 100%;
+  display: block;
+  border-radius: 6px;
+  transform: scaleX(-1);
+}
+.d-none {
+  display: none;
+}
+
+/* == Buttons General == */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+  line-height: 1.5;
+  text-align: center;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.btn[disabled] {
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.65;
+}
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--primary-hover-color);
+}
+.btn-primary[disabled] {
+  background-color: #ffeecf;
+  color: var(--subtle-text-color);
+}
+.btn-danger {
+  background-color: var(--error-color);
+  color: var(--white-color);
+}
+.btn-danger:hover,
+.btn-danger:focus {
+  background-color: #c82333;
+}
+.btn-danger[disabled] {
+  background-color: #f8d7da;
+  color: var(--subtle-text-color);
+}
+#camera-button {
+  width: 100%;
+  margin-top: 0.75rem !important;
+}
+
+/* == Loading, Empty, Error States == */
+.loading-indicator {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--background-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 2rem auto;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.empty-message,
+.error-message {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--subtle-text-color);
+  padding: 2rem;
+}
+.error-message {
+  color: var(--error-color);
+  font-weight: 500;
+}
+
+/* == Not Found Page Styling == */
+.not-found-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: calc(70vh - 100px);
+  padding: 2rem;
+}
+.not-found-container {
+  background-color: var(--surface-color);
+  padding: 2rem 3rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.not-found-title {
+  font-family: var(--font-family-headings);
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+.not-found-message {
+  font-family: var(--font-family-headings);
+  font-size: 1.5rem;
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+.not-found-suggestion {
+  font-size: 1rem;
+  color: var(--subtle-text-color);
+  margin-bottom: 2rem;
+}
+.go-home-btn {
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0.75rem 1rem;
+  }
+  .app-header__brand h1 {
+    font-size: 1.3rem;
+  }
+
+  /* Sembunyikan navigasi desktop (elemen ul di dalam .app-header__navigation yang BUKAN .navbar-links) */
+  .app-header__navigation > ul:not(.navbar-links) {
+    display: none;
+  }
+  /* Atau jika .navbar-links adalah satu-satunya ul, dan ia di-toggle untuk mobile/desktop */
+  .app-header__navigation .navbar-links {
+    /* Untuk desktop, ini display:flex. Untuk mobile, akan dioverride di bawah */
+  }
+
+  .hamburger-button {
+    display: block;
+  }
+
+  .app-header__navigation .navbar-links {
+    /* Ini adalah menu mobile yang di-slide */
+    display: none;
+    position: fixed;
+    top: 0;
+    right: -280px;
+    width: 260px;
+    height: 100%;
+    background-color: var(--surface-color); /* Pastikan ini solid */
+    padding: var(--header-height) 1rem 1rem 1rem; /* Padding atas = tinggi header + sedikit */
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    transition: right 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    z-index: 1080; /* DI ATAS OVERLAY (1070) dan HEADER (1000), DI BAWAH HAMBURGER (1100) */
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
+  .app-header__navigation .navbar-links.active {
+    display: flex !important;
+    right: 0;
+  }
+
+  .app-header__navigation .navbar-links li {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .app-header__navigation .navbar-links a,
+  .app-header__navigation .navbar-links button {
+    display: block;
+    width: 100%;
+    padding: 0.9rem 1rem;
+    text-align: left;
+    font-size: 1rem;
+    color: var(--text-color);
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0;
+    margin-left: 0 !important;
+    background-color: transparent;
+    font-weight: 500;
+    box-sizing: border-box;
+  }
+  .app-header__navigation .navbar-links li:last-child a,
+  .app-header__navigation .navbar-links li:last-child button {
+    border-bottom: none;
+  }
+
+  .app-header__navigation .navbar-links a:hover,
+  .app-header__navigation .navbar-links button:not([disabled]):hover {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+  }
+
+  .app-header__navigation .navbar-links .logout-button {
+    color: var(--error-color);
+  }
+  .app-header__navigation .navbar-links .logout-button:hover {
+    color: #a02323;
+  }
+
+  /* Sembunyikan SEMUA kontrol Leaflet di mobile */
+  .map-container .leaflet-control-container,
+  .map-container-small .leaflet-control-container {
+    display: none !important;
+  }
+
+  main {
+    padding: 1rem;
+  }
+  .content-heading {
+    font-size: 1.5rem;
+  }
+  .stories-list {
+    grid-template-columns: 1fr;
+  }
+  .not-found-title {
+    font-size: 4rem;
+  }
+  .not-found-message {
+    font-size: 1.2rem;
+  }
+}
+
+/* == View Transitions == */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+::view-transition-old(root) {
+  animation-name: fade-out-slide-left;
+}
+::view-transition-new(root) {
+  animation-name: fade-in-slide-right;
+}
+@keyframes fade-in-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes fade-out-slide-left {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+/* src/styles/styles.css */
+/* ... (style Anda yang lain) ... */
+
+.btn-outline-primary {
+  background-color: transparent;
+  border: 1px solid var(--primary-color); /* Sesuaikan dengan variabel warna Anda */
+  color: var(--primary-color);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  background-color: var(--primary-color);
+  color: var(--text-color); /* Atau var(--white-color) */
+}
+
+/* Anda mungkin juga ingin style spesifik untuk .story-item__actions atau tombol di dalamnya */
+.story-item__actions {
+  margin-top: 1rem; /* Memberi spasi dari deskripsi */
+  text-align: right; /* Atau 'left' atau 'center' sesuai keinginan */
+}
+
+.story-item__actions .btn {
+  width: 100%; /* Membuat tombol mengambil lebar penuh kontainer aksinya */
+  /* Jika Anda ingin tombol tidak full width, hapus baris ini atau sesuaikan */
+}
+
