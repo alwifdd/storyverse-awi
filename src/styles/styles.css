@@ -567,3 +567,28 @@ main {
     transform: translateX(-20px);
   }
 }
+/* src/styles/styles.css */
+/* ... (style Anda yang lain) ... */
+
+.btn-outline-primary {
+  background-color: transparent;
+  border: 1px solid var(--primary-color); /* Sesuaikan dengan variabel warna Anda */
+  color: var(--primary-color);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  background-color: var(--primary-color);
+  color: var(--text-color); /* Atau var(--white-color) */
+}
+
+/* Anda mungkin juga ingin style spesifik untuk .story-item__actions atau tombol di dalamnya */
+.story-item__actions {
+  margin-top: 1rem; /* Memberi spasi dari deskripsi */
+  text-align: right; /* Atau 'left' atau 'center' sesuai keinginan */
+}
+
+.story-item__actions .btn {
+  width: 100%; /* Membuat tombol mengambil lebar penuh kontainer aksinya */
+  /* Jika Anda ingin tombol tidak full width, hapus baris ini atau sesuaikan */
+}

@@ -1,7 +1,9 @@
 // src/data/story-data-source.js
 import CONFIG from "../config";
 import UserSession from "../utils/user-session";
-import StoryverseDb from "../utils/indexeddb-helper"; // <-- Import helper IndexedDB
+import StoryverseDb from "../utils/indexeddb-helper"; // Tetap diimpor jika ada penggunaan lain,
+// atau bisa dihapus jika StoryverseDb tidak lagi digunakan sama sekali di file ini.
+// Untuk sekarang kita biarkan.
 
 class StoryDataSource {
   static async #fetchWithAuth(url, options = {}) {
@@ -61,21 +63,22 @@ class StoryDataSource {
       responseJson.listStory &&
       responseJson.listStory.length > 0
     ) {
-      try {
-        // Simpan ke IndexedDB
-        await StoryverseDb.putAllStories(responseJson.listStory);
-        console.log(
-          "StoryDataSource: Cerita dari API berhasil disimpan ke IndexedDB."
-        );
-      } catch (dbError) {
-        console.error(
-          "StoryDataSource: Gagal menyimpan cerita ke IndexedDB:",
-          dbError
-        );
-        // Anda bisa memutuskan apakah ingin mengembalikan error atau tetap melanjutkan
-        // dengan data dari API meskipun penyimpanan ke DB gagal.
-        // Untuk saat ini, kita tetap lanjutkan dan biarkan error dicatat.
-      }
+      // Tidak lagi menyimpan semua cerita ke IndexedDB secara otomatis
+      // try {
+      //   // Simpan ke IndexedDB
+      //   // await StoryverseDb.putAllStories(responseJson.listStory); // <-- BARIS INI DIKOMENTARI
+      //   // console.log(
+      //   //   "StoryDataSource: Cerita dari API berhasil disimpan ke IndexedDB."
+      //   // );
+      // } catch (dbError) {
+      //   // console.error(
+      //   //   "StoryDataSource: Gagal menyimpan cerita ke IndexedDB:",
+      //   //   dbError
+      //   // );
+      // }
+      console.log(
+        "StoryDataSource: Data cerita dari API diterima. Penyimpanan otomatis ke IndexedDB (StoryverseDb) dinonaktifkan."
+      );
     } else if (responseJson.error) {
       console.warn(
         "StoryDataSource: Gagal mengambil cerita dari API, pesan:",

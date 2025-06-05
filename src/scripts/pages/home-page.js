@@ -2,11 +2,10 @@
 import StoryListPresenter from "../../presenters/story-list-presenter";
 import HTML_TEMPLATES from "../../views/templates";
 import MapInitiator from "../../utils/map-initiator";
-// HAPUS import StoryverseDb jika tidak lagi digunakan di sini atau di presenter yang diinisialisasi dari sini
-// HAPUS import UserSession dan CONFIG
+import IndexedDBStoryHelper from "../../data/indexeddb-story-helper"; // <-- 1. IMPORT BARU
 
 class HomePage {
-  // HAPUS properti #VAPID_PUBLIC_KEY
+  _stories = []; // <-- 4. Untuk menyimpan daftar cerita saat ini
 
   async render() {
     return `
@@ -15,8 +14,7 @@ class HomePage {
         <div id="map-container" class="map-container"></div>
         <div id="loading-container"></div>
         <div id="stories-list" class="stories-list"></div>
-        
-        </section>
+      </section>
     `;
   }
 
@@ -27,12 +25,10 @@ class HomePage {
       model: storyDataSource,
     });
 
-    // SEMUA Event listener untuk tombol yang dipindah SUDAH DIHAPUS dari sini
+    // 5. Tambahkan event listener untuk tombol bookmark
+    this.#attachBookmarkButtonListeners();
   }
 
-  // --- SEMUA METODE UNTUK PUSH NOTIFICATION SUDAH DIHAPUS DARI SINI ---
-
-  // --- Metode Lama (renderLoading, displayStories, dll.) TETAP ADA ---
   renderLoading() {
     const loadingContainer = document.querySelector("#loading-container");
     if (loadingContainer) {
@@ -61,12 +57,25 @@ class HomePage {
     }
   }
 
-  displayStories(stories) {
+  // 2. Ubah displayStories menjadi async
+  async displayStories(stories) {
+    this._stories = stories; // 4. Simpan cerita
     const storiesContainer = document.querySelector("#stories-list");
+
     if (storiesContainer) {
-      storiesContainer.innerHTML = stories
-        .map(HTML_TEMPLATES.createStoryItem)
-        .join("");
+      // 3. Kirim status bookmark ke template untuk setiap cerita
+      const storyItemsHtml = await Promise.all(
+        stories.map(async (story) => {
+          const isBookmarked = await IndexedDBStoryHelper.isStoryBookmarked(
+            story.id
+          );
+          return HTML_TEMPLATES.createStoryItem(story, {
+            isBookmarkedPage: false, // false karena ini bukan halaman saved-stories
+            isCurrentlyBookmarked: isBookmarked,
+          });
+        })
+      );
+      storiesContainer.innerHTML = storyItemsHtml.join("");
     }
     this.#initializeMap(stories);
   }
@@ -88,8 +97,69 @@ class HomePage {
     }
   }
 
+  // 6. Logika untuk menangani klik tombol bookmark
+  #attachBookmarkButtonListeners() {
+    const storiesContainer = document.querySelector("#stories-list");
+    if (storiesContainer) {
+      storiesContainer.addEventListener("click", async (event) => {
+        const toggleButton = event.target.closest(".btn-toggle-bookmark");
+        if (!toggleButton) return;
+
+        const storyId = toggleButton.dataset.id;
+        if (!storyId) return;
+
+        // Temukan objek cerita dari this._stories yang disimpan
+        const story = this._stories.find((s) => s.id === storyId);
+        if (!story) {
+          console.error("Story data not found for ID (in _stories):", storyId);
+          alert("Gagal memproses bookmark: data cerita tidak ditemukan.");
+          return;
+        }
+
+        // Cek status bookmark saat ini dari atribut aria-pressed
+        const isCurrentlyBookmarked =
+          toggleButton.getAttribute("aria-pressed") === "true";
+
+        try {
+          if (isCurrentlyBookmarked) {
+            await IndexedDBStoryHelper.deleteBookmarkedStory(storyId);
+            // alert('Cerita dihapus dari bookmark!'); // Notifikasi bisa lebih subtle
+            // Update tampilan tombol
+            toggleButton.setAttribute("aria-pressed", "false");
+            toggleButton.innerHTML =
+              '<i class="far fa-bookmark fa-fw"></i> Simpan Cerita';
+            toggleButton.setAttribute("aria-label", "Simpan Cerita");
+            console.log(`Story ${storyId} unbookmarked.`);
+          } else {
+            // Pastikan 'story' adalah objek yang benar untuk disimpan
+            await IndexedDBStoryHelper.saveBookmarkedStory(story);
+            // alert('Cerita disimpan ke bookmark!'); // Notifikasi bisa lebih subtle
+            // Update tampilan tombol
+            toggleButton.setAttribute("aria-pressed", "true");
+            toggleButton.innerHTML =
+              '<i class="fas fa-bookmark fa-fw"></i> Tersimpan';
+            toggleButton.setAttribute("aria-label", "Tersimpan");
+            console.log(`Story ${storyId} bookmarked.`);
+          }
+        } catch (dbError) {
+          console.error("Gagal memperbarui status bookmark:", dbError);
+          alert("Gagal memperbarui bookmark. Silakan coba lagi.");
+        }
+      });
+    }
+  }
+
   cleanup() {
     // Implementasi cleanup jika diperlukan
+    // Misalnya, menghapus event listener jika tidak menggunakan event delegation
+    // Namun, karena kita menggunakan event delegation pada #stories-list,
+    // dan #stories-list akan ada selama HomePage aktif, kita mungkin tidak perlu
+    // menghapusnya di sini kecuali HomePage sendiri dihancurkan dan dibuat ulang sering.
+    // Jika #stories-list di-innerHTML secara keseluruhan oleh renderPage(),
+    // listener yang di-attach di afterRender() ini perlu di-attach ulang.
+    // App.js Anda sudah menangani cleanup halaman sebelumnya, jadi ini mungkin tidak perlu
+    // kecuali ada listener spesifik HomePage yang dibuat di luar #content.
+    this._stories = []; // Kosongkan array cerita saat halaman dibersihkan
   }
 }
 
